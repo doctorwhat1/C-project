@@ -33,7 +33,7 @@ void SendData2Server(int count, int number)
 		return;
 	}//
 
-	char message[1000];
+	char message[10000];
 	sprintf(message, "<%d client> %s %d", number, "test", count);
 	int ret = send(client, message, strlen(message), 0);
 

@@ -18,6 +18,8 @@ void* ClientStart(void* param)
 	SOCKET client = (SOCKET)param;
 	char recieve[1024], transmit[1024];
 	int ret;
+	
+	
 
 	ret = recv(client, recieve, 1000, 0);
 	if (!ret || ret == SOCKET_ERROR)
@@ -25,7 +27,7 @@ void* ClientStart(void* param)
 		pthread_mutex_lock(&mutex);
 		pthread_mutex_lock(&mutex_file);
 		printf("Error getting data\n");
-		fprintf(stdout, "test");
+		fprintf(stdout, "test  ");
 		pthread_mutex_unlock(&mutex_file);
 		pthread_mutex_unlock(&mutex);
 		return (void*)1;
