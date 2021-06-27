@@ -9,10 +9,11 @@
 #include <winsock.h>
 #include <stdio.h>
 #include <Windows.h>
-
 pthread_mutex_t mutex;
 pthread_mutex_t mutex_file;
 
+
+//SEND INFO TO CLIENT
 void* ClientStart(void* param)
 {
 	SOCKET client = (SOCKET)param;
@@ -39,7 +40,7 @@ void* ClientStart(void* param)
 	pthread_mutex_unlock(&mutex_file);
 	pthread_mutex_unlock(&mutex);
 	sprintf_s(transmit, "%s %s %s\n", "Your data", recieve, "recieved");
-	//Sleep(2000);
+	//Sleep(4000);
 	ret = send(client, transmit, sizeof(transmit), 0);
 	if (ret == SOCKET_ERROR)
 	{
@@ -59,6 +60,7 @@ int CreateServer()
 	SOCKET server, client;
 	sockaddr_in localaddr, clientaddr;
 	int size;
+	char mes[100];
 	server = socket(AF_INET, SOCK_STREAM, IPPROTO_IP);
 	if (server == INVALID_SOCKET)
 	{
@@ -77,7 +79,7 @@ int CreateServer()
 	{
 		printf("Server is started\n");
 	}
-	listen(server, 50);//50 клиентов в очереди могут стоять
+	listen(server, 100);//50 клиентов в очереди могут стоять
 	pthread_mutex_init(&mutex, NULL);
 	pthread_mutex_init(&mutex_file, NULL);
 	while (1)
