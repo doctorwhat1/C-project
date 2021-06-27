@@ -9,24 +9,25 @@
 #include <winsock.h>
 #include <stdio.h>
 #include <Windows.h>
+
 pthread_mutex_t mutex;
 pthread_mutex_t mutex_file;
 
-
-//SEND INFO TO CLIENT
 void* ClientStart(void* param)
 {
 	SOCKET client = (SOCKET)param;
 	char recieve[1024], transmit[1024];
 	int ret;
+	
+	
 
-	ret = recv(client, recieve, 1024, 0);
+	ret = recv(client, recieve, 1000, 0);
 	if (!ret || ret == SOCKET_ERROR)
 	{
 		pthread_mutex_lock(&mutex);
 		pthread_mutex_lock(&mutex_file);
 		printf("Error getting data\n");
-		fprintf(stdout, "test");
+		fprintf(stdout, "test  ");
 		pthread_mutex_unlock(&mutex_file);
 		pthread_mutex_unlock(&mutex);
 		return (void*)1;
@@ -40,7 +41,7 @@ void* ClientStart(void* param)
 	pthread_mutex_unlock(&mutex_file);
 	pthread_mutex_unlock(&mutex);
 	sprintf_s(transmit, "%s %s %s\n", "Your data", recieve, "recieved");
-	//Sleep(4000);
+	//Sleep(2000);
 	ret = send(client, transmit, sizeof(transmit), 0);
 	if (ret == SOCKET_ERROR)
 	{
@@ -60,7 +61,6 @@ int CreateServer()
 	SOCKET server, client;
 	sockaddr_in localaddr, clientaddr;
 	int size;
-	char mes[100];
 	server = socket(AF_INET, SOCK_STREAM, IPPROTO_IP);
 	if (server == INVALID_SOCKET)
 	{
@@ -79,7 +79,7 @@ int CreateServer()
 	{
 		printf("Server is started\n");
 	}
-	listen(server, 100);//50 клиентов в очереди могут стоять
+	listen(server, 50);//50 клиентов в очереди могут стоять
 	pthread_mutex_init(&mutex, NULL);
 	pthread_mutex_init(&mutex_file, NULL);
 	while (1)

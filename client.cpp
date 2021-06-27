@@ -26,7 +26,6 @@ void SendData2Server(int count, int number)
 	server.sin_addr.S_un.S_addr = inet_addr("127.0.0.1"); //special look-up address
 
 	// IF ERROR
-	// PRINT
 	if (connect(client, (sockaddr*)&server, sizeof(server)) == SOCKET_ERROR)
 	{
 		printf("Can't connect to server\n");
@@ -34,13 +33,11 @@ void SendData2Server(int count, int number)
 		return;
 	}//
 
-
-
-	char message[1000];
-	sprintf(message, "<%d client> %s %d", number, "test ", count);
+	char message[10000];
+	sprintf(message, "<%d client> %s %d", number, "test", count);
 	int ret = send(client, message, strlen(message), 0);
 
-	//IF ERROR THEN
+	//IF ERROR
 	if (ret == SOCKET_ERROR)
 	{
 		printf("Can't send message\n");
@@ -63,7 +60,9 @@ void SendData2Server(int count, int number)
 		}//
 
 		if (ret < 0)
-
+		{
+			//printf("Can't resieve message\n");
+			/*closesocket(client);
 			return;*/
 			continue;
 		}
@@ -71,7 +70,6 @@ void SendData2Server(int count, int number)
 		printf("Recieve: %s\n bytes: %d\n", message, ret);
 	}
 	closesocket(client);
-	
 }
 
 int main()
@@ -86,7 +84,7 @@ int main()
 	srand(time(0));
 	rand();
 	int number = rand();
-	while (i < 1000) 
+	while (i < 1000)
 	{
 		SendData2Server(++i, number);
 		Sleep(2000);
